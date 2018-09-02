@@ -1,0 +1,68 @@
+<!Doctype html>
+<html>
+    <head>
+        <!--Color scheme
+            https://material.io/tools/color/#!/?view.left=0&view.right=0&primary.color=37474F&secondary.color=BDBDBD
+        -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Halaman Administrator TADICA</title>
+
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <!--Font Awesome-->
+        <script src="../assets/fontawesome/js/all.js"></script>
+        <!-- <link rel="stylesheet" href="../assets/fontawesome/css/all.css"> -->
+
+        <link rel="stylesheet" href="assets/css/style.css">
+        <script src="assets/js/change-content.js"></script>
+    </head>
+    <?php
+        session_start();
+        if (!isset($_SESSION['admin-logged-in']) || $_SESSION['admin-logged-in'] == false || (isset($_GET['logout']) && $_GET['logout'] == true)) {
+            header('location:admin-login.php');
+            session_destroy();
+        }
+    ?>
+    <body>
+        <aside id="nav-wrapper">
+            <ul class="nav flex-column">
+                <li class="navbar-brand text-center title">
+                    TADICA
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="dashboard"><i class="fas fa-tachometer-alt fa-fw"></i><span>Dashboard</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="soal-materi"><i class="fas fa-book fa-fw"></i><span>Soal dan Materi</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="kelas"><i class="fas fa-list-alt fa-fw"></i><span>Kelas</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="post"><i class="fas fa-file-alt fa-fw"></i><span>Posting</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="public-chat"><i class="fas fa-comments fa-fw"></i><span>Public Chat</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="informasi"><i class="fas fa-info-circle fa-fw"></i><span>Layanan Informasi</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="transaksi"><i class="fas fa-history fa-fw"></i><span>Transaksi</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?logout=true" id="logout"><i class="fas fa-sign-out-alt fa-fw"></i><span>Log out</span></a>
+                </li>
+            </ul>
+        </aside>
+        
+        <div id="wrapper">
+            <div class="container-fluid" id="content-wrapper"></div>
+        </div>
+    </body>
+</html>

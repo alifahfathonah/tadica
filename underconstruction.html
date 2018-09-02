@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <title>Website Under Construction</title>
+        <style>
+            body {
+                margin: 0;
+                background-color: #363739;
+            }
+
+            #message-outer {
+                display: table;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+            #message {
+                display: table-cell;
+                vertical-align: middle;
+            }
+            #message-content {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 400px;
+            }
+            #message-content img {
+                border-radius: 20px;
+                max-width: calc(100% - 20px);
+                margin: 0 10px;
+                box-shadow: 0px 5px 8px rgba(0,0,0,0.5);
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>
+            $( document ).ready(function() {
+                var hostname = document.location.host;
+                if (hostname != "localhost") {
+                    $('body').children('div').last().remove();
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div id="message-outer">
+            <div id="message">
+                <div id="message-content">
+                    <img src="assets/images/under-construction.jpg" alt="Under Construction">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

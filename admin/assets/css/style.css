@@ -1,0 +1,69 @@
+#nav-wrapper {
+    float: left;
+    width: 250px;
+    background-color: #102027;
+    height: 100vh;
+    overflow: auto
+}
+
+#wrapper {
+    width: auto;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #efefef;
+}
+
+.container-fluid {
+    padding: 20px 15px;
+}
+
+.title {
+    color: #fff;
+    margin: 20px 0;
+}
+
+.nav .nav-item .nav-link {
+    color: #dedede;
+}
+
+.nav .active {
+    background-color: #efefef;
+    color: #102027 !important;
+}
+
+.nav .nav-item:hover {
+    background-color: #37474f;
+}
+
+* {
+    transition: .3s all ease-in-out;
+}
+
+.nav .nav-link span {
+    margin-left: 5px;
+}
+
+#summary-container .inner {
+	padding: 10px;
+	border-radius: 6px;
+}
+
+#smr-siswa {
+	background-color: #a5d6a7;
+}
+
+#smr-soal-materi {
+	background-color: #81d4fa;
+}
+
+#smr-post {
+	background-color: #f48fb1;
+}
+
+#summary-container ul {
+    padding-left: 15px;
+}
+
+#summary-container ul li {
+    list-style: square;
+}

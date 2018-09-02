@@ -1,0 +1,70 @@
+<?php
+    function getJumlahSiswa($rendah, $tinggi) {
+        include '../../php-engine/connect_tadica_db.php';
+
+        if (isset($rendah) && isset($tinggi)) {
+            $query = "SELECT count(*) as hasil FROM siswa WHERE id_kelas >= '$rendah' AND id_kelas <= '$tinggi';";
+        }
+        else {
+            $query = "SELECT count(*) as hasil FROM siswa;";
+        }
+        
+        $result = mysqli_query($connect, $query);
+        if(!$connect) {
+            die("CONNECTION FILED : " . mysqli_connect_error());
+        }
+        else {
+            return mysqli_fetch_array($result)['hasil'];
+        }
+        mysqli_close($connect);
+    }
+
+    $sd = getJumlahSiswa(1, 6);
+    $smp = getJumlahSiswa(7, 9);
+    $sma = getJumlahSiswa(10, 12);
+    $all = getJumlahSiswa(null, null);
+
+    if ($all != 0) {
+        $sdRat = ($sd*100)/$all;
+        $smpRat = ($smp*100)/$all;
+        $smaRat = ($sma*100)/$all;
+    }
+    else {
+        $sdRat = "N/a";
+        $smpRat = "N/a";
+        $smaRat = "N/a";
+    }
+?>
+
+<h1>Dashboard</h1>
+<div id="summary-container">
+    <div class="row">
+        <div class="col">
+            <div id="smr-siswa" class="inner">
+                Jumlah Member (Siswa)
+                <ul>
+                    <li>
+                        SD <?php echo $sd." (".$sdRat."%)"; ?>
+                    </li>
+                    <li>
+                        SMP <?php echo $smp." (".$smpRat."%)"; ?>
+                    </li>
+                    <li>
+                        SMA <?php echo $sma." (".$smaRat."%)"; ?>
+                    </li>
+                </ul>
+                Jumlah keseluruhan siswa : <?php echo $all; ?>
+            </div>
+        </div>
+        <div class="col">
+            <div id="smr-soal-materi" class="inner">
+                Jumlah Materi dan Soal
+            </div>
+        </div>
+        <div class="col">
+            <div id="smr-post" class="inner">
+                Jumlah Postingan
+            </div>
+        </div>
+    </div>
+</div>
