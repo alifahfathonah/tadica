@@ -43,9 +43,11 @@
     margin-left: 5px;
 }
 
+/* Dashboard */
+
 #summary-container .inner {
 	padding: 10px;
-	border-radius: 6px;
+    border-radius: 6px;
 }
 
 #smr-siswa {
@@ -66,4 +68,51 @@
 
 #summary-container ul li {
     list-style: square;
+}
+
+.materi-sum {
+    background-color: #e57373;
+}
+
+.soal-sum {
+    background-color: #efefef;
+}
+
+.box-radius {
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/*Materi Soal*/
+.bg-light-x {
+	background-color: #f3f3f3;
+}
+
+.fixed-w {
+    width: 204px;
+}
+
+/*Datatable*/
+
+.btn-group {
+    margin: 0 10px;
+}
+.dataTables_info {
+    float: left !important;
+}
+.dataTables_paginate {
+    float: right !important;
+    margin-bottom: 10px;
+}
+.dataTables_length {
+    float: left !important;
+}
+.dataTables_filter {
+    float: right !important;
+}
+
+.input-smx {
+    display: inline-block;
+    width: auto;
+    margin: 0 5px;
 }

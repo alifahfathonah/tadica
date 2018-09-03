@@ -1,0 +1,71 @@
+<?php
+    if(isset($_POST['action'])) {
+        $id = $_POST['action'];
+        //print_r($actionData);
+        include '../../php-engine/connect_tadica_db.php';
+
+        $query = "SELECT id_kelas, id_matpel, id_soal, nama_materi, id_download, tanggal_upload, tanggal_update
+                FROM materi WHERE id_materi = ".$id.";";
+        $result = mysqli_query($connect, $query);
+
+        $materiData = mysqli_fetch_array($result, MYSQLI_NUM);
+        // mysqli_close($connect);
+    }
+?>
+
+<h1><button type="button" id="back" class="btn btn-primary"><i class="fa fa-arrow-left fa-fw"></i></button> Edit Materi</h1>
+<form>
+    <label>Nama Materi</label>
+    <input type="text" name="nama_materi" class="form-control" placeholder="Masukkan nama materi" value="<?php echo $materiData[3]; ?>" required>
+    <label>Kelas </label>
+    <select class="form-control" name="id_kelas" required>
+        <?php
+            $query = "SELECT * FROM kelas;";
+            $result =  mysqli_query($connect, $query);
+
+            // $kelasData = [];
+            while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                // array_push($kelasData, $row);
+                if ($row[0] == $materiData[0]) {
+                    echo "<option value=\"".$row[0]."\" selected>".$row[1]."</option>";
+                }
+                else {
+                    echo "<option value=\"".$row[0]."\">".$row[1]."</option>";
+                }
+            }
+            // print_r($kelasData);
+            // mysqli_close($connect);
+        ?>
+    </select>
+    <?php 
+        $query = "SELECT nama_matpel FROM matpel WHERE id_matpel = ".$materiData[1].";";
+        $result = mysqli_query($connect, $query);
+        $nama_matpel = mysqli_fetch_array($result)['nama_matpel'];
+    ?>
+    <label>Mata Pelajaran</label>
+    <input type="text" list="matpel" name="id_matpel" class="form-control" placeholder="Masukkan nama mata pelajaran" value="<?php echo $nama_matpel; ?>" required>
+
+    <datalist id="matpel">
+        <?php
+            $query = "SELECT nama_matpel FROM matpel;";
+            $result = mysqli_query($connect, $query);
+
+            while($row = mysqli_fetch_array($result)) {
+                echo "<option value=\"".$row['nama_matpel']."\">";
+            }
+        ?>
+    </datalist>
+
+    <label>Soal yang Terhubung</label> <br/>
+    <button type="submit" class="btn btn-primary">Simpan</button>
+</form>
+
+<script>
+$(document).ready(function() {
+    $("#back").click(function() {
+        // console.log(contentBefore);
+        changeContent(contentBefore, false, null);
+        contentBefore = null;
+    });
+});
+</script>

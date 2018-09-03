@@ -104,7 +104,7 @@
                         <h1>Login Administrator</h1>
                     </div>
                     <form method="POST" action="" id="login">
-                        <input type="text" name="username" id="username" class="form-control" placeholder="Username" required> <br/>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus> <br/>
                         <input type="password" name="password" id="password" class="form-control" placeholder="Password" required> <br/>
                         <input type="submit" value="Masuk" id="masuk" class="btn btn-primary">
                         <span id="login-error">

@@ -3,7 +3,7 @@
         include '../../php-engine/connect_tadica_db.php';
 
         if (isset($rendah) && isset($tinggi)) {
-            $query = "SELECT count(*) as hasil FROM siswa WHERE id_kelas >= '$rendah' AND id_kelas <= '$tinggi';";
+            $query = "SELECT count(*) as hasil FROM siswa WHERE id_kelas >= ".$rendah." AND id_kelas <= ".$tinggi.";";
         }
         else {
             $query = "SELECT count(*) as hasil FROM siswa;";
@@ -14,9 +14,9 @@
             die("CONNECTION FILED : " . mysqli_connect_error());
         }
         else {
+            mysqli_close($connect);
             return mysqli_fetch_array($result)['hasil'];
         }
-        mysqli_close($connect);
     }
 
     $sd = getJumlahSiswa(1, 6);
@@ -34,6 +34,51 @@
         $smpRat = "N/a";
         $smaRat = "N/a";
     }
+
+    function getJumlahSoalMateri($rendah, $tinggi, $tabel) {
+        include '../../php-engine/connect_tadica_db.php';
+
+        if (isset($rendah) && isset($tinggi)) {
+            $query = "SELECT count(*) AS hasil FROM ".$tabel." WHERE id_kelas >= ".$rendah." AND id_kelas <= ".$tinggi.";";
+        }
+        else {
+            $query = "SELECT count(*) AS hasil FROM ".$tabel.";";
+        }
+        include '../../php-engine/connect_tadica_db.php';
+        $result = mysqli_query($connect, $query);
+        if(!$connect || !$query) {
+            die("CONNECTION FILED : " . mysqli_connect_error());
+        }
+        else {
+            mysqli_close($connect);
+            return mysqli_fetch_array($result)['hasil'];
+        }
+    }
+
+    $materiSd = getJumlahSoalMateri(1, 6, 'materi');
+    $materiSmp = getJumlahSoalMateri(7, 9, 'materi');
+    $materiSma = getJumlahSoalMateri(10, 12, 'materi');
+
+    $soalSd = getJumlahSoalMateri(1, 6, 'soal');
+    $soalSmp = getJumlahSoalMateri(7, 9, 'soal');
+    $soalSma = getJumlahSoalMateri(10, 12, 'soal');
+
+    function getJumlahPost() {
+        include '../../php-engine/connect_tadica_db.php';
+        
+        $query = "SELECT count(*) as hasil FROM post;";
+        
+        $result = mysqli_query($connect, $query);
+        if(!$connect) {
+            die("CONNECTION FILED : " . mysqli_connect_error());
+        }
+        else {
+            mysqli_close($connect);
+            return mysqli_fetch_array($result)['hasil'];
+        }
+    }
+
+    $post = getJumlahPost();
 ?>
 
 <h1>Dashboard</h1>
@@ -41,7 +86,7 @@
     <div class="row">
         <div class="col">
             <div id="smr-siswa" class="inner">
-                Jumlah Member (Siswa)
+                <h4>Jumlah Member (Siswa)</h4>
                 <ul>
                     <li>
                         SD <?php echo $sd." (".$sdRat."%)"; ?>
@@ -58,12 +103,32 @@
         </div>
         <div class="col">
             <div id="smr-soal-materi" class="inner">
-                Jumlah Materi dan Soal
+                <h4>Jumlah Materi dan Soal</h4>
+                <ul>
+                    <li>
+                        SD <br/>
+                        <span class="materi-sum box-radius"><?php echo $materiSd; ?></span> <span class="soal-sum box-radius"><?php echo $soalSd; ?></span>
+                    </li>
+                    <li>
+                        SMP <br/>
+                        <span class="materi-sum box-radius"><?php echo $materiSmp; ?></span> <span class="soal-sum box-radius"><?php echo $soalSmp; ?></span>
+                    </li>
+                    <li>
+                        SMA <br/>
+                        <span class="materi-sum box-radius"><?php echo $materiSma; ?></span> <span class="soal-sum box-radius"><?php echo $soalSma; ?></span>
+                    </li>
+                </ul>
+                <span class="materi-sum box-radius"></span>&nbsp;Materi &nbsp;&nbsp;&nbsp;<span class="soal-sum box-radius"></span>&nbsp;Soal
             </div>
         </div>
         <div class="col">
             <div id="smr-post" class="inner">
-                Jumlah Postingan
+                <h4>Jumlah Postingan</h4>
+                <ul>
+                    <li>
+                        Semua post : <?php echo "$post"; ?>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
