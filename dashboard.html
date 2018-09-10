@@ -1,0 +1,66 @@
+<!Doctype html>
+<html>
+    <head>
+        <!--Color scheme
+            https://material.io/tools/color/#!/?view.left=0&view.right=0&primary.color=37474F&secondary.color=BDBDBD
+        -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Halaman Siswa TADICA</title>
+
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <!--Datatables-->
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <!--Font Awesome-->
+        <script src="assets/fontawesome/js/all.js"></script>
+        <!-- <link rel="stylesheet" href="../assets/fontawesome/css/all.css"> -->
+
+        <link rel="stylesheet" href="assets/css/dashboard-style.css">
+    </head>
+    <?php
+        session_start();
+        if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false || (isset($_GET['logout']) && $_GET['logout'] == true)) {
+            header('location:login.php');
+            session_destroy();
+        }
+    ?>
+    <body>
+        <script src="assets/js/change-content.js"></script>
+        
+        <aside id="nav-wrapper">
+            <ul class="nav flex-column">
+                <li class="navbar-brand text-center title">
+                    TADICA
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="dashboard"><i class="fas fa-tachometer-alt fa-fw"></i><span>Dashboard</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="belajar"><i class="fas fa-book fa-fw"></i><span>Belajar</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="ujian"><i class="fas fa-list-alt fa-fw"></i><span>Ujian</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="public-chat"><i class="fas fa-comments fa-fw"></i><span>Public Chat</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" id="pengaturan-akun"><i class="fas fa-cog fa-fw"></i><span>Pengaturan Akun</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?logout=true" id="logout"><i class="fas fa-sign-out-alt fa-fw"></i><span>Log out</span></a>
+                </li>
+            </ul>
+        </aside>
+        
+        <div id="wrapper">
+            <div class="container-fluid" id="content-wrapper"></div>
+        </div>
+    </body>
+</html>

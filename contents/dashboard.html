@@ -1,0 +1,21 @@
+<h1>Dashboard</h1>
+<?php
+    include '../php-engine/connect_tadica_db.php';
+?>
+<div class="card text-white bg-primary">
+    <div class="card-header"><i class="fas fa-info-circle fa-fw"></i></div>
+    <div class="card-body">
+        <h5 class="card-title">Selamat Datang, 
+            <?php
+                session_start();
+                $id = $_SESSION['id-siswa'];
+                $query = "SELECT nama FROM siswa WHERE id_siswa = $id";
+                $result = mysqli_query($connect, $query);
+                echo mysqli_fetch_array($result)['nama'];
+            ?>
+        </h5>
+        <p class="card-text">
+            Anda login sebagai siswa. Silahkan belajar dan mengerjakan ujian.
+        </p>
+    </div>
+</div>

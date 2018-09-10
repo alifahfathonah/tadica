@@ -1,0 +1,106 @@
+<h1><button type="button" id="back" class="btn btn-primary"><i class="fa fa-arrow-left fa-fw"></i></button> Buat Materi</h1>
+
+<?php
+include '../../php-engine/connect_tadica_db.php';
+?>
+
+<form autocomplete="off" id="tambah-materi-form">
+    <div class="form-group">
+        <label>Nama Materi</label>
+        <input type="text" name="nama_materi" class="form-control" id="nama_materi" placeholder="Masukkan nama materi" required>
+    </div>
+    <div class="form-group">
+        <label>Pilih Kelas</label>
+        <select name="id_kelas" class="form-control" id="id_kelas">
+            <!-- <option value="1">1 SD</option> -->
+            <?php
+                $query = "SELECT * FROM kelas";
+                $result = mysqli_query($connect, $query);
+
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'>$row[1]</option>";
+                }
+            ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Mata Pelajaran</label>
+        <input type="hidden" name="add-new-matpel" id="add-new-matpel" value="false">
+        <input type="text" list="matpel-list" class="form-control" name="nama_matpel" id="nama_matpel" placeholder="Masukkan nama mata pelajaran" required>
+        <datalist id="matpel-list">
+            <!-- <option value="Ilmu Pengetahuan Alam"></option> -->
+            <?php
+                $query = "SELECT nama_matpel FROM matpel";
+                $result = mysqli_query($connect, $query);
+
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'></option>";
+                }
+            ?>
+        </datalist>
+    </div>
+    <div class="form-group">
+        <label>Upload Materi (PDF)</label>
+        <input type="file" class="form-control" name="nama_file" id="nama_file" required>
+    </div>
+    <div class="form-group">
+        <label>ID Soal yang Terhubung dengan Materi Ini (Optional)</label>
+        <input type="text" list="id-soal-list" class="form-control" name="id_soal" id="id_soal" placeholder="Masukkan ID Soal">
+        <datalist id="id-soal-list">
+            <!-- <option value="1">(1) IPA</option> -->
+            <?php
+                $query = "SELECT id_soal, nama_soal FROM soal";
+                $result = mysqli_query($connect, $query);
+                
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'>($row[0]) $row[1]</option>";
+                }
+            ?>
+        </datalist>
+    </div>
+    <div class="form-group">
+        <input type="submit" name="submit" value="Simpan" id="submit" class="btn btn-primary">
+    </div>
+</form>
+
+<script>
+$(document).ready(function() {
+    $("#back").click(function() {
+        changeContent(contentBefore, false, null);
+        contentBefore = null;
+    });
+
+    $("#submit").click(function(event) {
+            if ($("#nama_file").val() != '' && $("#nama_materi").val() != '' && $("#id_kelas").val() != '' && $("#nama_matpel").val() != '') {
+                event.preventDefault();
+                $(this).prop("disabled", true);
+
+                var matpel = $("#matpel-list").find("option[value='"+$("#nama_matpel").val()+"']");
+                console.log(matpel);
+                if (matpel.length == 0) {
+                    $("#add-new-matpel").val("true");
+                }
+
+                var data = new FormData($("#tambah-materi-form")[0]);
+
+                $.ajax({
+                    url: 'contents/tambah-materi.php',
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    success: function(data){
+                        if (data.trim() != ("file-exists").trim() && data.trim() != ("not-success").trim() && data.trim() != ("not-pdf").trim()) {
+                            $("#back").trigger("click");
+                        }
+                        else {
+                            alert(data);
+                        }
+                        $("#submit").prop("disabled", false);
+                    }
+                });
+            }
+    });
+});
+</script>

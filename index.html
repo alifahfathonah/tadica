@@ -1,14 +1,223 @@
+<?php
+include 'php-engine/connect_tadica_db.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>TADICA Bimbel Online</title>
-        <script>
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+
+        <!--Font Awesome-->
+        <script src="assets/fontawesome/js/all.js"></script>
+
+        <!-- <script>
             window.location = "underconstruction.html";
-        </script>
+        </script> -->
+
+        <link rel="stylesheet" href="assets/css/style.css">
+
     </head>
     <body>
-        
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">TADICA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tentang Kami</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tanya TADICA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">FAQ</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-sm-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <header class="jumbotron">
+            <h1>Tadica Bimbel Online</h1>
+            <p class="lead">
+                TADICA merupakan platform bimbel online yang praktis. Dibangun dengan sistem web yang
+                interaktif sehingga dapat meningkatkan pengalaman belajar Anda.
+            </p>
+            <hr class="my-4"/>
+            <a class="btn btn-primary" href="#daftar">Daftar Sekarang!</a>
+        </header>
+        <div class="container" id="daftar">
+            <div class="row">
+                <div class="col mr-3">
+                    <p>
+                        Daftar sekarang di TADICA.tk! <br/>
+                        Pendaftaran bimbel ini 100% gratis tidak ada biaya tambahan.
+                        Jika ada pihak yang memberikan info mengenai pembayaran bimbel TADICA,
+                        kemungkinan besar itu adalah penipuan.
+                    </p>
+                    <hr class="my-4"/>
+                    <h3>Kelebihan TADICA</h3>
+                    <ul class="list-unstyled">
+                        <li class="media mb-4">
+                            <i class="fa fa-book fa-fw fa-3x mr-3" style="color: #0097a7;"></i>
+                            <div class="media-body">
+                                <h5 class="mt-0">Materi Pembelajaran PDF</h5>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia dolore magnam corporis sed, quam velit veniam, sapiente animi inventore odit illo corrupti? Amet numquam debitis expedita quaerat optio ex laborum.
+                            </div>
+                        </li>
+                        
+                        <li class="media mb-4">
+                            <i class="fa fa-tasks fa-fw fa-3x mr-3" style="color: #ec407a;"></i>
+                            <div class="media-body">
+                                <h5 class="mt-0">Ujian Online</h5>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia dolore magnam corporis sed, quam velit veniam, sapiente animi inventore odit illo corrupti? Amet numquam debitis expedita quaerat optio ex laborum.
+                            </div>
+                        </li>
+
+                        <li class="media mb-4">
+                            <i class="fa fa-headset fa-fw fa-3x mr-3" style="color: #7e57c2;"></i>
+                            <div class="media-body">
+                                <h5 class="mt-0">Layanan Online</h5>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia dolore magnam corporis sed, quam velit veniam, sapiente animi inventore odit illo corrupti? Amet numquam debitis expedita quaerat optio ex laborum.
+                            </div>
+                        </li>
+
+                        <li class="media mb-4">
+                            <i class="far fa-check-circle fa-fw fa-3x mr-3" style="color: #29b6f6;"></i>
+                            <div class="media-body">
+                                <h5 class="mt-0">Hasil Langsung Keluar</h5>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia dolore magnam corporis sed, quam velit veniam, sapiente animi inventore odit illo corrupti? Amet numquam debitis expedita quaerat optio ex laborum.
+                            </div>
+                        </li>
+
+                        <li class="media mb-4">
+                            <i class="fa fa-dollar-sign fa-fw fa-3x mr-3" style="color: #66bb6a;"></i>
+                            <div class="media-body">
+                                <h5 class="mt-0">100% Gratis!</h5>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia dolore magnam corporis sed, quam velit veniam, sapiente animi inventore odit illo corrupti? Amet numquam debitis expedita quaerat optio ex laborum.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-4">
+                    <form action="daftar.php" autocomplete="off" method="POST">
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jenis Kelamin</label> <br/>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="jenis_kelamin" value="1" required>
+                                <label>Laki - Laki</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="jenis_kelamin" value="0" required>
+                                <label>Perempuan</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat</label>
+                            <input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Lahir</label>
+                            <input type="date" class="form-control" name="tanggal_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Asal Sekolah</label>
+                            <input type="text" class="form-control" name="asal_sekolah" placeholder="Masukkan Asal Sekolah" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Kelas</label>
+                            <select class="form-control" name="id_kelas" required>
+                                <?php
+                                    $query = "SELECT * FROM kelas";
+                                    $result = mysqli_query($connect, $query);
+                    
+                                    while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                                        echo "<option value='$row[0]'>$row[1]</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" class="form-control" placeholder="Masukkan Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="form-row">
+                                <div class="col">
+                                    <input type="password" name="password" id="password" minlength="8" placeholder="Masukkan password" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <input type="password" id="password-confirm" minlength="8" placeholder="Konfirmasi password" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="not-match">Password doesn't match!</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Masukkan Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>No Handphone</label>
+                            <input type="tel" name="no_hp" class="form-control" placeholder="Masukkan No Handphone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Daftar">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        OKE BOS
+                    </div>
+                    <div class="col">
+                        YOI BOS
+                    </div>
+                    <div class="col">
+                        WOI
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            $(document).ready(function() {
+                $("#password-confirm").keyup(function() {
+                    // console.log($(this).val());
+                    // console.log($("#password").val());
+                    if($(this).val() !== $("#password").val()) {
+                        $(this).css("border", "2px solid red");
+                        $(".not-match").css("display", "block");
+                    }
+                    else {
+                        $(this).css("border", "");
+                        $(".not-match").css("display", "");
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

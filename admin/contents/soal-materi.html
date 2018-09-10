@@ -1,4 +1,4 @@
-<h1>Materi <button type="button" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i></button></h1>
+<h1>Materi <button type="button" class="btn btn-primary" id="tambah-materi"><i class="fas fa-plus fa-fw"></i></button></h1>
 
 <div class="table-responsive">
     <table class="display table table-bordered table-hover datatable">
@@ -32,11 +32,11 @@
                     echo "<td class='align-middle'>$row[1]</td>";
                     echo "<td class='align-middle'>$row[2]</td>";
                     echo "<td class='align-middle'>$row[3]</td>";
-                    echo "<td class='align-middle'>$row[4]</td>";
+                    echo "<td class='align-middle'><a href='../pdf-viewer/web/viewer.html?file=..%2f..%2fassets%2fpdf%2fmateri%2f".rawurlencode($row[4])."' target='_blank'>$row[4]</a></td>";
                     echo "<td class='align-middle'>$row[5]</td>";
                     echo "<td class='align-middle fixed-w'>";
-                    echo "<button type='button' class='btn btn-warning edit' name='action' value='$row[3]'><i class='far fa-edit fa-fw'></i> Edit</button> ";
-                    echo "<button type='button' class='btn btn-danger hapus' name='action' value='$row[3]'><i class='far fa-trash-alt fa-fw'></i> Hapus</button>";
+                    echo "<button type='button' class='btn btn-warning edit' name='action' value='$row[0]'><i class='far fa-edit fa-fw'></i> Edit</button> ";
+                    echo "<button type='button' class='btn btn-danger hapus' name='action' value='$row[0]'><i class='far fa-trash-alt fa-fw'></i> Hapus</button>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -45,7 +45,7 @@
     </table>
 </div>
 
-<h1>Soal <button type="button" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i></button></h1>
+<h1>Soal <button type="button" class="btn btn-primary" id="tambah-soal"><i class="fas fa-plus fa-fw"></i></button></h1>
 
 <div class="table-responsive">
     <table class="display table table-bordered table-hover datatable">
@@ -71,13 +71,13 @@
 
                 $result = mysqli_query($connect, $query);
 
-                while ($row = mysqli_fetch_array($query, MYSQLI_NUM)) {
+                while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
                     echo "<tr class='bg-light-x'>";
                     echo "<td class='align-middle'>".(int)$row[0]."</td>";
                     echo "<td class='align-middle'>$row[1]</td>";
                     echo "<td class='align-middle'>$row[2]</td>";
                     echo "<td class='align-middle'>$row[3]</td>";
-                    echo "<td class='align-middle'>$row[4]</td>";
+                    echo "<td class='align-middle'><a href='../pdf-viewer/web/viewer.html?file=..%2f..%2fassets%2fpdf%2fsoal%2f".rawurlencode($row[4])."' target='_blank'>$row[4]</a></td>";
                     echo "<td class='align-middle'>$row[5]</td>";
                     echo "<td class='align-middle fixed-w'>";
                     echo "<button type='button' class='btn btn-warning edit-soal' name='action' value='$row[3]'><i class='far fa-edit fa-fw'></i> Edit</button> ";
@@ -93,10 +93,14 @@
 <script>
     var contentBefore = null;
     $(document).ready(function() {
-        
+        $("#tambah-materi").click(function() {
+            contentBefore = "contents/soal-materi.html"
+            changeContent("contents/tambah-materi.html", false, null);
+        });
+
         $("button.edit").click(function() {
             var actionValue = $(this).val();
-            console.log(actionValue);
+            // console.log(actionValue);
             contentBefore = "contents/soal-materi.html"
             changeContent("contents/edit-materi.html", true, actionValue);
             return false;
@@ -104,8 +108,12 @@
         
         $("button.hapus").click(function() {
             var actionValue = $(this).val();
-            console.log(actionValue);
             return false;
+        });
+
+        $("#tambah-soal").click(function() {
+            contentBefore = "contents/soal-materi.html"
+            changeContent("contents/tambah-soal.html", false, null);
         });
 
         var table = $('.datatable').DataTable( {
@@ -113,7 +121,6 @@
         } );
 
         table.on( 'draw', function () {
-            console.log( 'Redraw occurred at: '+new Date().getTime() );
             $("span .paginate_button").parent().addClass("btn-group").attr("role", "group");
             $(".paginate_button").addClass("btn btn-primary");
             $(".paginate_button.current").removeClass("btn-primary").addClass("btn-secondary");

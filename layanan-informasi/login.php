@@ -71,25 +71,26 @@
         include '../php-engine/connect_tadica_db.php';
         session_start();
 
-        if(isset($_SESSION['admin-logged-in']) && $_SESSION['admin-logged-in'] == true) {
+        if(isset($_SESSION['li-loggedin']) && $_SESSION['li-loggedin'] == true) {
             header('location:index.html');
         }
         else {
             if (isset($_POST['username']) && isset($_POST['password'])) {
                 $username=$_POST['username'];
                 $password=sha1($_POST['password']);
-                $query = "SELECT username, password FROM admin WHERE username='$username' AND password='$password';";
+                $query = "SELECT username, password FROM layanan_informasi WHERE username='$username' AND password='$password';";
                 $login_data = mysqli_query($connect, $query);
 
                 if(!$connect) {
                     die("CONNECTION FILED : " . mysqli_connect_error());
                 }
                 else if (mysqli_num_rows($login_data) > 0) {
-                    $_SESSION['admin-logged-in'] = true;
+                    $_SESSION['li-loggedin'] = true;
+                    $_SESSION['username'] = $username;
                     header('location:index.html');
                 }
                 else {
-                    $_SESSION['admin-logged-in'] = false;
+                    $_SESSION['li-loggedin'] = false;
                     $loginError = true;
                 }
                 mysqli_close($connect);
@@ -109,7 +110,7 @@
                         <input type="submit" value="Masuk" id="masuk" class="btn btn-primary">
                         <span id="login-error">
                             <?php
-                                if (isset($_SESSION['admin-logged-in']) && $_SESSION['admin-logged-in'] == false) {
+                                if (isset($_SESSION['li-loggedin']) && $_SESSION['li-loggedin'] == false) {
                                     echo "Username atau Password salah!";
                                     session_destroy();
                                 }

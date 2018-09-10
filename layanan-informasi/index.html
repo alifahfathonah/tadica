@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<?php
+    session_start();
+    if (!isset($_SESSION['li-loggedin']) || $_SESSION['li-loggedin'] == false || (isset($_GET['logout']) && $_GET['logout'] == true)) {
+        header('location:login.php');
+        session_destroy();
+    }
+    else {
+        include '../php-engine/connect_tadica_db.php';
+
+        $username = $_SESSION['username'];
+        $query = "SELECT id_user FROM layanan_informasi WHERE username = '$username'";
+        $result = mysqli_query($connect, $query);
+        $id_user = mysqli_fetch_array($result)['id_user'];
+    }
+?>
+
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Halaman Tadica Public Chat</title>
+
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <!--Font Awesome-->
+        <script src="../assets/fontawesome/js/all.js"></script>
+
+        <style>
+            #chat-outer {
+                padding: 10px;
+                background-color: aqua;
+            }
+
+            #chat-content {
+                height: 500px;
+                overflow-y: auto;
+                background-color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div id="chat-outer">
+                <div id="chat-content"></div>
+                <form id="chat-form" autocomplete="off">
+                    <div class="row">
+                        <div class="col-10">
+                                <input type="hidden" name="id_user" value="<?php echo $id_user ?>">
+                                <input type="hidden" name="siswa" value="0">
+                                <input type="text" name="pesan" class="form-control pesan" placeholder="Masukkan pesan.." required>
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Submit" id="submit" class="btn btn-primary">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                var checkValue = function(obj) {
+                    var ok = true;
+                    $(obj).each(function(i, j) {
+                        if ($(j).val().trim() === '') {
+                            ok = false;
+                            return false;
+                        }
+                    });
+                    return ok;
+                }
+
+                $("#submit").click(function(event) {
+                    if (checkValue($(".pesan"))) {
+                        event.preventDefault();
+                        $(this).prop("disabled", true);
+                        var data = new FormData($("#chat-form")[0]);
+
+                        $.ajax({
+                            url: 'send.php',
+                            data: data,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            method: 'POST',
+                            success: function(data){
+                                alert(data);
+                                $(".pesan").val('');
+                                $(this).prop("disabled", false);
+                            }
+                        });
+                    }
+                });
+
+                function loadLog(){		
+                    var oldscrollHeight = $("#chat-content").attr("scrollHeight") - 20; //Scroll height before the request
+                    $.ajax({
+                        url: "get.php",
+                        cache: false,
+                        success: function(html){		
+                            $("#chat-content").html(html); //Insert chat log into the #chat-content div	
+                            
+                            //Auto-scroll			
+                            var newscrollHeight = $("#chat-content").attr("scrollHeight") - 20; //Scroll height after the request
+                            if(newscrollHeight > oldscrollHeight){
+                                $("#chat-content").animate({ scrollTop: newscrollHeight }, 'normal'); //Autoscroll to bottom of div
+                            }				
+                        },
+                    });
+                }
+                setInterval (loadLog, 1000);
+            });
+        </script>
+    </body>
+</html>

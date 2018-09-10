@@ -1,0 +1,186 @@
+<h1><button type="button" id="back" class="btn btn-primary"><i class="fa fa-arrow-left fa-fw"></i></button> Buat Soal</h1>
+
+<?php
+include '../../php-engine/connect_tadica_db.php';
+?>
+
+<form id="tambah-soal-form" autocomplete="off">
+    <div class="form-group">
+        <label>Nama Soal</label>
+        <input type="text" name="nama_soal" id="nama_soal" class="form-control" placeholder="Masukkan nama soal" required>
+    </div>
+    <div class="form-group">
+        <label>Mata Pelajaran</label>
+        <input type="hidden" name="add-new-matpel" id="add-new-matpel" value="false">
+        <input type="text" list="matpel-list" class="form-control" name="nama_matpel" id="nama_matpel" placeholder="Masukkan nama mata pelajaran" required>
+        <datalist id="matpel-list">
+            <!-- <option value="Ilmu Pengetahuan Alam"></option> -->
+            <?php
+                $query = "SELECT nama_matpel FROM matpel";
+                $result = mysqli_query($connect, $query);
+
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'></option>";
+                }
+            ?>
+        </datalist>
+    </div>
+    <div class="form-group">
+        <label>Kelas</label>
+        <select name="id_kelas" class="form-control" id="id_kelas" required>
+            <!-- <option value="1">1 SD</option> -->
+            <?php
+                $query = "SELECT * FROM kelas";
+                $result = mysqli_query($connect, $query);
+
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'>$row[1]</option>";
+                }
+            ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Upload Soal (PDF)</label>
+        <input type="file" class="form-control" name="nama_file" id="nama_file" required>
+    </div>
+    <div class="form-group">
+        <label>Materi yang Terhubung</label>
+        <input type="text" list="id-materi-list" class="form-control" name="id_materi" id="id_materi" placeholder="Masukkan ID Materi">
+        <datalist id="id-materi-list">
+            <!-- <option value="1">(1) IPA</option> -->
+            <?php
+                $query = "SELECT id_materi, nama_materi FROM materi";
+                $result = mysqli_query($connect, $query);
+                
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<option value='$row[0]'>($row[0]) $row[1]</option>";
+                }
+            ?>
+        </datalist>
+    </div>
+    <div id="soal_container">
+        <div class="form-group">
+            <label>Soal 1</label>
+            <textarea class="form-control pertanyaan" name="pertanyaan[0]" placeholder="Masukkan Soal.." rows="3" required></textarea>
+            <label>Jawaban</label>
+            <div class="form-row detail-jawaban">
+                <div class="col-auto">
+                    <input type="radio" name="benar[0]" class="form-control mb-2 benar" value="0" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="jawaban[0]" class="form-control mb-2 jawaban" placeholder="Masukkan jawaban..."  required>
+                </div>
+            </div>
+            <div class="form-row detail-jawaban">
+                <div class="col-auto">
+                    <input type="radio" name="benar[0]" class="form-control mb-2 benar" value="1" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="jawaban[1]" class="form-control mb-2 jawaban" placeholder="Masukkan jawaban..." required>
+                </div>
+            </div>
+            <div class="form-row detail-jawaban">
+                <div class="col-auto">
+                    <input type="radio" name="benar[0]" class="form-control mb-2 benar" value="2" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="jawaban[2]" class="form-control mb-2 jawaban" placeholder="Masukkan jawaban..." required>
+                </div>
+            </div>
+            <div class="form-row detail-jawaban">
+                <div class="col-auto">
+                    <input type="radio" name="benar[0]" class="form-control mb-2 benar" value="3" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="jawaban[3]" class="form-control mb-2 jawaban" placeholder="Masukkan jawaban..." required>
+                </div>
+            </div>
+            <div class="form-row detail-jawaban">
+                <div class="col-auto">
+                    <input type="radio" name="benar[0]" class="form-control mb-2 benar" value="4" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="jawaban[4]" class="form-control mb-2 jawaban" placeholder="Masukkan jawaban..." required>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary" id="tambah-pertanyaan" title="Tambah pertanyaan"><i class="fas fa-plus fa-fw"></i></button> <br/>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Simpan" id="submit">
+    </div>
+</form>
+
+<script>
+$(document).ready(function() {
+    var soal = 0;
+    var jawaban = 4;
+    $("#back").click(function() {
+        changeContent(contentBefore, false, null);
+        contentBefore = null;
+    });
+
+    $("#tambah-pertanyaan").click(function() {
+        soal++;
+        $("#soal_container").append("<div class='form-group'></div>");
+        $("#soal_container .form-group").last().append("<label>Soal "+(soal+1)+"</label>");
+        $("#soal_container .form-group").last().append($(".pertanyaan").last().clone());
+        $(".pertanyaan").last().attr({name: "pertanyaan["+soal+"]"});
+        $("#soal_container .form-group").last().append("<label>Jawaban</label>");
+        for (let i = 1; i <= 5; i++) {
+            $("#soal_container .form-group").last().append($(".detail-jawaban").last().clone());
+            $(".benar").last().attr({name: "benar["+soal+"]", value: ""+(jawaban+i)+""});
+            $(".jawaban").last().attr({name: "jawaban["+(jawaban+i)+"]"});
+        }
+        jawaban+=5;
+    });
+
+    var checkValue = function(obj) {
+        var ok = true;
+        $(obj).each(function(i, j) {
+            if ($(j).val().trim() === '') {
+                ok = false;
+                return false;
+            }
+        });
+        return ok;
+    }
+
+    $("#submit").click(function(event) {
+
+        if ($("#nama_file").val() != '' && $("#nama_soal").val() != '' && $("#id_kelas").val() != '' && $("#nama_matpel").val() != '' && checkValue($(".benar")) && checkValue($(".pertanyaan")) && checkValue($(".jawaban"))) {
+            event.preventDefault();
+            $(this).prop("disabled", true);
+
+            var matpel = $("#matpel-list").find("option[value='"+$("#nama_matpel").val()+"']");
+            console.log(matpel);
+            if (matpel.length == 0) {
+                $("#add-new-matpel").val("true");
+            }
+
+            var data = new FormData($("#tambah-soal-form")[0]);
+
+            $.ajax({
+                url: 'contents/tambah-soal.php',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                success: function(data){
+                    if (data.trim() != ("file-exists").trim() && data.trim() != ("not-success").trim() && data.trim() != ("not-pdf").trim()) {
+                        alert(data);
+                        $("#back").trigger("click");                        
+                    }
+                    else {
+                        alert(data);
+                    }
+                    $("#submit").prop("disabled", false);
+                }
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,127 @@
+<h1><button type="button" id="back" class="btn btn-primary"><i class="fa fa-arrow-left fa-fw"></i></button> Kerjakan Soal</h1>
+<?php
+include '../php-engine/connect_tadica_db.php';
+session_start();
+
+$id = $_POST['id'];
+
+$query = "SELECT nama_matpel, nama_kelas, nama_soal FROM soal s, matpel, kelas WHERE nama_matpel 
+= (SELECT nama_matpel FROM matpel WHERE id_matpel = s.id_matpel) AND nama_kelas = 
+(SELECT nama_kelas FROM kelas WHERE id_kelas = s.id_kelas) AND id_soal = $id";
+
+$result = mysqli_query($connect, $query);
+$soal = mysqli_fetch_array($result, MYSQLI_NUM);
+
+$query = "SELECT count(*) FROM pertanyaan WHERE id_soal = $id";
+$result = mysqli_query($connect, $query);
+$jumlah = mysqli_fetch_array($result, MYSQLI_NUM)[0];
+?>
+
+<table class="table table-bordered">
+    <tr>
+        <th scope="row" width='200'>Nama Matpel</th>
+        <td><?php echo $soal[0] ?></td>
+    </tr>
+    <tr>
+        <th scope="row">Kelas</th>
+        <td><?php echo $soal[1] ?></td>
+    </tr>
+    <tr>
+        <th scope="row">Soal</th>
+        <td><?php echo $soal[2] ?></td>
+    </tr>
+    <tr>
+        <th scope="row">Jumlah Soal</th>
+        <td><?php echo $jumlah ?></td>
+    </tr>
+</table>
+
+<form id="jawaban-form" autocomplete="off">
+    <input type="hidden" name="jumlah-soal" value="<?php echo $jumlah ?>">
+    <input type="hidden" name="id-siswa" value="<?php echo $_SESSION['id-siswa'] ?>">
+    <input type="hidden" name="id" value="<?php echo $id ?>">
+<ol>
+
+<?php
+// $query = "SELECT id_pilihan FROM pilihan WHERE id_pertanyaan = (SELECT id_pertanyaan FROM pertanyaan WHERE id_soal = $id) AND benar = 1";
+// $result = mysqli_query($connect, $query);
+// $benar = array();
+
+// while ($row = mysqli_fetch_array($result)) {
+//     array_push($benar, $row['id_pilihan']);
+// }
+
+// $jawaban = array('00000000002');
+// $hasil = array_intersect($benar, $jawaban);
+
+$query = "SELECT id_pertanyaan, pertanyaan FROM pertanyaan WHERE id_soal = $id";
+$result = mysqli_query($connect, $query);
+
+$id_jwb = 0;
+while ($pertanyaan = mysqli_fetch_array($result, MYSQLI_NUM)) {
+    echo "<li>$pertanyaan[1] <br/>";
+    $query = "SELECT id_pilihan, jawaban FROM pilihan WHERE id_pertanyaan = $pertanyaan[0]";
+    $jawab = mysqli_query($connect, $query);
+    $huruf = array('A', 'B', 'C', 'D', 'E');
+    $idx = 0;
+    while ($jawab_row = mysqli_fetch_array($jawab, MYSQLI_NUM)) {
+        echo "<div class='form-check'>";
+        echo "<input type='radio' class='form-check-input jawaban' name='jawaban[$id_jwb]' value='$jawab_row[0]' required> $huruf[$idx]. $jawab_row[1]";
+        echo "</div>";
+        $idx++;
+    }
+    echo "</li>";
+    $id_jwb++;
+}
+?>
+
+</ol>
+<input type="submit" class="btn btn-primary" id="submit" value="Kirim">
+</form>
+
+<script>
+    $(document).ready(function() {
+        var checkValue = function(obj) {
+            var ok = true;
+            $(obj).each(function(i, j) {
+                if ($(j).val().trim() === '') {
+                    ok = false;
+                    return false;
+                }
+            });
+            return ok;
+        }
+
+        $("#back").click(function() {
+            changeContent(contentBefore, false, null);
+            contentBefore = null;
+        });
+
+        $("#submit").click(function(event) {
+            if (checkValue($(".jawaban"))) {
+                console.log('in');
+                event.preventDefault();
+                $(this).prop("disabled", true);
+                var data = new FormData($("#jawaban-form")[0]);
+
+                $.ajax({
+                    url: 'contents/soal.php',
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    success: function(data){
+                        alert(data);
+                        if (data.trim() == "Success") {
+                            $("#back").trigger("click");
+                        }
+                        else {
+                            $("#submit").prop("disabled", false);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

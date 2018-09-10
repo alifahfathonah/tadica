@@ -1,27 +1,37 @@
-<h1>Ini transaksi</h1>
+<h1>Materi</h1>
 <?php
-    include '../../php-engine/connect_tadica_db.php';
+    include '../php-engine/connect_tadica_db.php';
 ?>
 
 <div class="table-responsive">
     <table class="display table table-bordered table-hover datatable">
         <thead>
             <tr class="thead-dark">
-                <th scope="col">ID transaksi</th>
-                <th scope="col">Tanggal</th>
-                <th scope="col">Keterangan</th>
+                <th scope="col">Mata Pelajaran</th>
+                <th scope="col">Nama Materi</th>
+                <th scope="col">Aksi</th>
             </tr>
         </thead>
         <tbody>
             <?php
-                $query = "SELECT * FROM transaksi ORDER BY id_transaksi DESC";
+                session_start();
+                $id = $_SESSION['id-siswa'];
+                $query = "SELECT id_kelas FROM siswa WHERE id_siswa = $id";
+                $result = mysqli_query($connect, $query);
+                $id_kelas = mysqli_fetch_array($result)['id_kelas'];
+
+                $query = "SELECT nama_matpel, nama_materi, nama_file FROM materi m, matpel, 
+                download WHERE nama_matpel = (SELECT nama_matpel FROM matpel WHERE id_matpel 
+                = m.id_matpel) AND nama_file = (SELECT nama_file FROM download WHERE id_download 
+                = m.id_download) AND m.id_kelas = $id_kelas";
                 $result = mysqli_query($connect, $query);
 
-                while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
                     echo "<tr class='bg-light-x'>";
                     echo "<td class='align-middle'>$row[0]</td>";
                     echo "<td class='align-middle'>$row[1]</td>";
-                    echo "<td class='align-middle'>$row[2]</td>";
+                    echo "<td class='align-middle'><a href='pdf-viewer/web/viewer.html?file=..%2f..%2fassets%2fpdf%2fmateri%2f".rawurlencode($row[2])."' target='_blank' class='btn btn-success'>Lihat Materi</a></td>";
+                    
                     echo "</tr>";
                 }
             ?>
@@ -30,7 +40,7 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() {        
         var table = $('.datatable').last().DataTable( {
             "pagingType": "simple_numbers"
         } );

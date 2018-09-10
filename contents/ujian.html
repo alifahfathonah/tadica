@@ -1,0 +1,111 @@
+<h1>Ujian</h1>
+<?php
+    include '../php-engine/connect_tadica_db.php';
+?>
+
+<div class="table-responsive">
+    <table class="display table table-bordered table-hover datatable">
+        <thead>
+            <tr class="thead-dark">
+                <th scope="col">Mata Pelajaran</th>
+                <th scope="col">Nama Materi</th>
+                <th scope="col">File</th>
+                <th scope="col">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                session_start();
+                $id = $_SESSION['id-siswa'];
+                $query = "SELECT id_kelas FROM siswa WHERE id_siswa = $id";
+                $result = mysqli_query($connect, $query);
+                $id_kelas = mysqli_fetch_array($result)['id_kelas'];
+
+                $query = "SELECT id_soal, nama_matpel, nama_soal, nama_file FROM soal s, matpel, download 
+                WHERE nama_matpel = (SELECT nama_matpel FROM matpel WHERE id_matpel = s.id_matpel) 
+                AND nama_file = (SELECT nama_file FROM download WHERE id_download = s.id_download) 
+                AND s.id_kelas = $id_kelas";
+                $result = mysqli_query($connect, $query);
+
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    echo "<tr class='bg-light-x'>";
+                    echo "<td class='align-middle'>$row[1]</td>";
+                    echo "<td class='align-middle'>$row[2]</td>";
+                    echo "<td class='align-middle'><a href='pdf-viewer/web/viewer.html?file=..%2f..%2fassets%2fpdf%2fsoal%2f".rawurlencode($row[3])."' target='_blank' class='btn btn-success'>Lihat Soal</a></td>";
+                    echo "<td class='align-middle'><button class='btn btn-primary ujian' name='id_soal' value='$row[0]'>Kerjakan</button></td>";
+                    echo "</tr>";
+                }
+            ?>
+        </tbody>
+    </table>
+</div>
+
+<h1>Hasil Ujian</h1>
+<div class="table-responsive">
+    <table class="display table table-bordered table-hover datatable">
+        <thead>
+            <tr class="thead-dark">
+                <th scope="col">Tanggal</th>
+                <th scope="col">Mata Pelajaran</th>
+                <th scope="col">Kelas</th>
+                <th scope="col">Soal</th>
+                <th scope="col">Benar</th>
+                <th scope="col">Salah</th>
+                <th scope="col">Poin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                $query = "SELECT tanggal, nama_matpel, nama_kelas, nama_soal, benar, salah, poin 
+                FROM ujian u, matpel, kelas, soal WHERE nama_matpel = (SELECT nama_matpel FROM 
+                matpel WHERE id_matpel = (SELECT id_matpel FROM soal WHERE id_soal = u.id_soal)) 
+                AND nama_kelas = (SELECT nama_kelas FROM kelas WHERE id_kelas = (SELECT id_kelas 
+                FROM soal WHERE id_soal = u.id_soal)) AND nama_soal = (SELECT nama_soal FROM soal 
+                WHERE id_soal = u.id_soal) AND id_siswa = $id";
+                $result = mysqli_query($connect, $query);
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<tr>";
+                    echo "<td class='align-middle'>$row[0]</td>";
+                    echo "<td class='align-middle'>$row[1]</td>";
+                    echo "<td class='align-middle'>$row[2]</td>";
+                    echo "<td class='align-middle'>$row[3]</td>";
+                    echo "<td class='align-middle'>$row[4]</td>";
+                    echo "<td class='align-middle'>$row[5]</td>";
+                    echo "<td class='align-middle'>$row[6]</td>";
+                    echo "</tr>";
+                }
+            ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var contentBefore = null;
+
+    $(document).ready(function() {
+        var table = $('.datatable').DataTable( {
+            "pagingType": "simple_numbers"
+        } );
+
+        table.on( 'draw', function () {
+            $("span .paginate_button").parent().addClass("btn-group").attr("role", "group");
+            $(".paginate_button").addClass("btn btn-primary");
+            $(".paginate_button.current").removeClass("btn-primary").addClass("btn-secondary");
+        } );
+        
+        $("span .paginate_button").parent().addClass("btn-group").attr("role", "group");
+        $(".paginate_button").addClass("btn btn-primary");
+        $(".paginate_button.current").removeClass("btn-primary").addClass("btn-secondary");
+
+        $(".dataTables_length").find("select").addClass("form-control input-smx");
+        $(".dataTables_filter").find("input").addClass("form-control input-smx");
+
+        $("button.ujian").click(function() {
+            var actionValue = $(this).val();
+            // console.log(actionValue);
+            contentBefore = "contents/ujian.html";
+            changeContent("contents/soal.html", true, actionValue);
+            return false;
+        });
+    });
+</script>
