@@ -4,7 +4,7 @@ $id_siswa = $_POST['id-siswa'];
 $id = $_POST['id'];
 $jumlah = $_POST['jumlah-soal'];
 
-$query = "SELECT id_pilihan FROM pilihan WHERE id_pertanyaan = (SELECT id_pertanyaan FROM pertanyaan WHERE id_soal = $id) AND benar = 1";
+$query = "SELECT id_pilihan FROM pilihan WHERE id_pertanyaan IN (SELECT id_pertanyaan FROM pertanyaan WHERE id_soal = $id) AND benar = 1";
 $result = mysqli_query($connect, $query);
 $benar = array();
 
