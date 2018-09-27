@@ -66,7 +66,16 @@
         </aside>
         
         <div id="wrapper">
-            <div class="container-fluid" id="content-wrapper"></div>
+            <div id="loader">
+                <div id="loader-inner">
+                    <div id="icon"></div>
+                    <div id="load-error" style="display:none;">
+                        <h3>Pemuatan Halaman Error!</h3>
+                        <a href="javascript:location.reload(true);" class="btn btn-primary">Reload</a>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid animate-bottom" id="content-wrapper"></div>
         </div>
     </body>
 </html>

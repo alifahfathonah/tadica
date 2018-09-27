@@ -22,7 +22,7 @@
         $result = mysqli_query($connect, $query);
         $_SESSION['loggedin'] = true;
         $_SESSION['id-siswa'] = mysqli_fetch_array($result)['id_siswa'];
-        header('location: login.html');
+        header('location: login.php');
     }
 
     mysqli_close($connect);

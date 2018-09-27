@@ -53,6 +53,10 @@ $(document).ready(function() {
 });
 
 var changeContent = function(filePath, postPhp, actionValue) {
+    $("#loader").css("display", "table");
+    $("#content-wrapper").css("display", "none");
+    $("#load-error").css("display", "none");
+    $("#icon").css("display", "block");
     if (postPhp) {
         // $.post("contents/manage-soal-materi.html", {action: action});
         $.ajax({
@@ -62,6 +66,12 @@ var changeContent = function(filePath, postPhp, actionValue) {
             data: {id: actionValue},
             success: function(html) {
                 $("#content-wrapper").html(html);
+                $("#loader").css("display", "none");
+                $("#content-wrapper").css("display", "block");
+            },
+            error: function() {
+                $("#icon").css("display", "none");
+                $("#load-error").css("display", "block");
             }
         });
     }
@@ -71,6 +81,12 @@ var changeContent = function(filePath, postPhp, actionValue) {
             cache: false,
             success: function(html) {
                 $("#content-wrapper").html(html);
+                $("#loader").css("display", "none");
+                $("#content-wrapper").css("display", "block");
+            },
+            error: function() {
+                $("#icon").css("display", "none");
+                $("#load-error").css("display", "block");
             }
         });
     }

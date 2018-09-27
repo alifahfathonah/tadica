@@ -126,17 +126,19 @@ $(document).ready(function() {
         soal++;
         $("#soal_container").append("<div class='form-group'></div>");
         $("#soal_container .form-group").last().append("<label>Soal "+(soal+1)+"</label>");
-        $("#soal_container .form-group").last().append($(".pertanyaan").last().clone());
-        $(".pertanyaan").last().attr({name: "pertanyaan["+soal+"]"});
+        // $("#soal_container .form-group").last().append($(".pertanyaan").last().clone());
+        // $(".pertanyaan").last().attr({name: "pertanyaan["+soal+"]"});
+        $("#soal_container .form-group").last().append("<textarea class='form-control pertanyaan' name='pertanyaan["+soal+"]' placeholder='Masukkan Soal..' rows='3' required></textarea>");
         $("#soal_container .form-group").last().append("<label>Jawaban</label>");
         for (let i = 1; i <= 5; i++) {
-            $("#soal_container .form-group").last().append($(".detail-jawaban").last().clone());
-            $(".benar").last().attr({name: "benar["+soal+"]", value: ""+(jawaban+i)+""});
-            $(".jawaban").last().attr({name: "jawaban["+(jawaban+i)+"]"});
+            $("#soal_container .form-group").last().append("<div class='form-row detail-jawaban'></div>");
+            // $(".benar").last().attr({name: "benar["+soal+"]", value: ""+(jawaban+i)+""}).val("");
+            // $(".jawaban").last().attr({name: "jawaban["+(jawaban+i)+"]"}).val("");
+            $(".detail-jawaban").last().append("<div class='col-auto'><input type='radio' name='benar["+soal+"]' class='form-control mb-2 benar' value='"+(jawaban+i)+"' required></div>");
+            $(".detail-jawaban").last().append("<div class='col'><input type='text' name='jawaban["+(jawaban+i)+"]' class='form-control mb-2 jawaban' placeholder='Masukkan jawaban...' required></div>");
         }
         jawaban+=5;
     });
-
     var checkValue = function(obj) {
         var ok = true;
         $(obj).each(function(i, j) {
